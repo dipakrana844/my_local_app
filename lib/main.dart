@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
+      title: 'Local Database App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.teal,
@@ -42,6 +42,16 @@ class _MyHomePageState extends State<MyHomePage> {
   getAllUserDetails() async {
     var users = await _userService.readAllUsers();
     _userList = <User>[];
+    // var checkEmpty = await _userService.checkDatabase();
+    // if (checkEmpty == "") {
+    //   const Text(
+    //     'Edit New User',
+    //     style: TextStyle(
+    //         fontSize: 20,
+    //         color: Colors.teal,
+    //         fontWeight: FontWeight.w500),
+    //   );
+    // } else {
     users.forEach((user) {
       setState(() {
         var userModel = User();
@@ -55,6 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _userList.add(userModel);
       });
     });
+    // }
   }
 
   @override
@@ -77,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (param) {
           return AlertDialog(
             title: const Text(
-              'Are You Sure to Delete',
+              'Are you sure you want to delete?',
               style: TextStyle(color: Colors.teal, fontSize: 20),
             ),
             actions: [
@@ -87,13 +98,36 @@ class _MyHomePageState extends State<MyHomePage> {
                       backgroundColor: Colors.red),
                   onPressed: () async {
                     var result = await _userService.deleteUser(userId);
+                    var users = await _userService.readAllUsers();
                     if (result != null) {
                       Navigator.pop(context);
                       getAllUserDetails();
                       _showSuccessSnackBar('User Detail Deleted Success');
+
+                        // if(users == null){
+                        //   // Navigator.pop(context);
+                        //   // const Text(
+                        //     //   'No Data Found',
+                        //     //   style: TextStyle(
+                        //     //       fontSize: 20,
+                        //     //       color: Colors.teal,
+                        //     //       fontWeight: FontWeight.w500),
+                        //     // );
+                        // }
+
                     }
+
+                    // else {
+                    //   const Text(
+                    //     'No Data Found',
+                    //     style: TextStyle(
+                    //         fontSize: 20,
+                    //         color: Colors.teal,
+                    //         fontWeight: FontWeight.w500),
+                    //   );
+                    // }
                   },
-                  child: const Text('Delete')),
+                  child: const Text('Yes')),
               TextButton(
                   style: TextButton.styleFrom(
                       primary: Colors.white, // foreground
@@ -101,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('Close'))
+                  child: const Text('No'))
             ],
           );
         });
@@ -149,11 +183,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     IconButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditUser(
-                                        miUserId: _userList[index].miId!,
-                                      ))).then((data) {
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditUser(
+                                miUserId: _userList[index].miId!,
+                              ),
+                            ),
+                          ).then((data) {
                             if (data != null) {
                               getAllUserDetails();
                               _showSuccessSnackBar(
@@ -166,13 +202,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           color: Colors.teal,
                         )),
                     IconButton(
-                        onPressed: () {
-                          _deleteFormDialog(context, _userList[index].miId);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        ))
+                      onPressed: () {
+                        _deleteFormDialog(context, _userList[index].miId);
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -188,6 +225,14 @@ class _MyHomePageState extends State<MyHomePage> {
             if (data != null) {
               getAllUserDetails();
               _showSuccessSnackBar('User Detail Added Success');
+            } else {
+              const Text(
+                'No User',
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.teal,
+                    fontWeight: FontWeight.w500),
+              );
             }
           });
         },

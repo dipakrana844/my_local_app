@@ -37,7 +37,7 @@ class _EditUserState extends State<EditUser> {
   bool mbEmail = false;
   bool mbDob = false;
 
-  String msContactPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+  // String msContactPattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
   String msEmailPattern =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
 
@@ -46,10 +46,6 @@ class _EditUserState extends State<EditUser> {
   File? moPickedImage;
   String? msImagePath;
 
-  // User? moUser =  UserService().moRepository.getUserAllDetail('users', miUserId);
-
-  // static get miUserId => null; //Database queary from ID
-  // var userDetail = UserService().moRepository.getUserAllDetail('users', widget.miUserId);
   getUserData(int fiId) async {
     if (widget.miUserId != 0) {
       var loUser = await UserService()
@@ -140,7 +136,6 @@ class _EditUserState extends State<EditUser> {
         // moPickedImage = loTempImage;
         msImagePath = loPhoto.path;
       });
-
       Get.back();
     } catch (error) {
       debugPrint(error.toString());
@@ -171,13 +166,13 @@ class _EditUserState extends State<EditUser> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.teal, width: 5),
+                            border: Border.all(color: Colors.black, width: 2),
                             borderRadius: const BorderRadius.all(
                               Radius.circular(100),
                             ),
                           ),
                           child: ClipOval(
-                            child: moPickedImage != null
+                            child:moPickedImage != null
                                 ? Image.file(
                                     moPickedImage!,
                                     width: 150,
@@ -189,40 +184,38 @@ class _EditUserState extends State<EditUser> {
                                     color: Colors.teal,
                                     size: 150,
                                   ),
-
-                            // Image.network(
-                            //         'https://upload.wikimedia.org/wikipedia/commons/5/5f/Alberto_conversi_profile_pic.jpg',
-                            //         width: 150,
-                            //         height: 150,
-                            //         fit: BoxFit.cover,
-                            //       ),
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 5,
-                          child: IconButton(
-                            onPressed: imagePickerOption,
-                            icon: const Icon(
-                              Icons.add_a_photo_outlined,
+                        Container(
+                          // margin: const EdgeInsets.all(0.0),
+                          // padding: const EdgeInsets.all(0.0),
+                          decoration: BoxDecoration(
                               color: Colors.teal,
-                              size: 50,
+                            border: Border.all(
+                              color: Colors.black ,
+                              width: 2.0 ,
                             ),
+                            borderRadius: BorderRadius.circular(100),
                           ),
-                        )
+                           child: Positioned(
+                              // bottom: 0,
+                              // right: 10,
+                              child: IconButton(
+                                onPressed: imagePickerOption,
+                                icon: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 25,
+                                ),
+                              ),
+                            )
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: ElevatedButton.icon(
-                  //       onPressed: (){},
-                  //       icon: const Icon(Icons.add_a_photo_sharp),
-                  //       label: const Text('UPLOAD IMAGE')),
-                  // )
                 ],
               ),
               // const Text(
@@ -235,7 +228,7 @@ class _EditUserState extends State<EditUser> {
               const SizedBox(
                 height: 20.0,
               ),
-              TextField(
+              TextFormField(
                 controller: moUserFirstNameController,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.person, color: Colors.teal),
@@ -271,7 +264,7 @@ class _EditUserState extends State<EditUser> {
               ),
               TextField(
                   controller: moUserContactController,
-                  maxLength: 10,
+                  // maxLength: 10,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.phone, color: Colors.teal),
                     border: const OutlineInputBorder(
@@ -327,12 +320,14 @@ class _EditUserState extends State<EditUser> {
                     });
                   } else {
                     print("Date is not selected");
+                    mbDob = false;
+
+                   // ErrorHint("Required");
                   }
                 },
                 child: AbsorbPointer(
                   child: TextField(
                     controller: moUserDobController,
-                    // keyboardType: TextInputType.datetime,
                     decoration: const InputDecoration(
                       prefixIcon:
                           Icon(Icons.calendar_today, color: Colors.teal),
@@ -341,8 +336,10 @@ class _EditUserState extends State<EditUser> {
                           Radius.circular(10),
                         ),
                       ),
+                      // errorText: msValidateDob == "" ? 'Save' : 'Update',
                       labelText: "Enter DOB",
                       hintText: 'Enter Date of Birth',
+
                     ),
                     // readOnly: true,
                   ),
@@ -362,8 +359,8 @@ class _EditUserState extends State<EditUser> {
                         setState(() {
                           if (moUserFirstNameController.text.isEmpty ||
                               moUserLastNameController.text.isEmpty) {
-                            msValidateFirstName = "First value Can\'t Be Empty";
-                            msValidateLastName = "Last value Can\'t Be Empty";
+                            msValidateFirstName = "Required";
+                            msValidateLastName = "Required";
                           } else {
                             msValidateFirstName = null;
                             msValidateLastName = null;
@@ -372,17 +369,17 @@ class _EditUserState extends State<EditUser> {
                           }
 
                           if (moUserContactController.text.isEmpty) {
-                            msValidateContact = "Contact value Can\'t Be Empty";
+                            msValidateContact = "Required";
                           } else if (moUserContactController.text.length !=
                               10) {
-                            msValidateContact = "Please Enter 10 Digit...";
+                            msValidateContact = "Invalid";
                           } else {
                             msValidateContact = null;
                             mbContact = true;
                           }
 
                           if (moUserEmailController.text.isEmpty) {
-                            msValidateEmail = "Contact value Can\'t Be Empty";
+                            msValidateEmail = "Required";
                           } else if (!RegExp(msEmailPattern)
                               .hasMatch(moUserEmailController.text)) {
                             msValidateEmail = "Please enter valid email";
@@ -391,43 +388,40 @@ class _EditUserState extends State<EditUser> {
                             mbEmail = true;
                           }
                         });
-                        if (mbFName && mbLName && mbContact && mbEmail) {
-                          if (await moUserService.checkEmailVerify(
-                                  moUserEmailController.text) !=
-                              0) {
-                            msValidateEmail = "Email Already Exists.";
+                        if (mbFName && mbLName && mbContact && mbEmail ) {
+                          // if (await moUserService.checkEmailVerify(
+                          //         moUserEmailController.text) !=
+                          //     0) {
+                          //   msValidateEmail =  "Required!!!";
+                          // } else {
+                          //   mbEmail = true;
+                          // print("Good Data Can Save");
+                          var loUser = User();
+                          if (widget.miUserId == 0) {
+                            loUser.msFName = moUserFirstNameController.text;
+                            loUser.msLName = moUserLastNameController.text;
+                            loUser.msContact = moUserContactController.text;
+                            loUser.msEmail = moUserEmailController.text;
+                            loUser.msDob = moUserDobController.text;
+                            loUser.msImg = msImagePath;
+                            var loResult = await moUserService.saveUser(loUser);
+                            Navigator.pop(context, loResult);
                           } else {
-                            mbEmail = true;
-                            // print("Good Data Can Save");
-                            var loUser = User();
-                            if (widget.miUserId == 0) {
-                              loUser.msFName = moUserFirstNameController.text;
-                              loUser.msLName = moUserLastNameController.text;
-                              loUser.msContact = moUserContactController.text;
-                              loUser.msEmail = moUserEmailController.text;
-                              loUser.msDob = moUserDobController.text;
-                              loUser.msImg = msImagePath;
-                              var loResult =
-                                  await moUserService.saveUser(loUser);
-                              Navigator.pop(context, loResult);
-                            } else {
-                              loUser.miId = widget.miUserId;
-                              loUser.msFName = moUserFirstNameController.text;
-                              loUser.msLName = moUserLastNameController.text;
-                              loUser.msContact = moUserContactController.text;
-                              loUser.msEmail = moUserEmailController.text;
-                              loUser.msDob = moUserDobController.text;
-                              loUser.msImg = msImagePath;
-                              var loResult =
-                                  await moUserService.updateUser(loUser);
-                              Navigator.pop(context, loResult);
-                            }
+                            loUser.miId = widget.miUserId;
+                            loUser.msFName = moUserFirstNameController.text;
+                            loUser.msLName = moUserLastNameController.text;
+                            loUser.msContact = moUserContactController.text;
+                            loUser.msEmail = moUserEmailController.text;
+                            loUser.msDob = moUserDobController.text;
+                            loUser.msImg = msImagePath;
+                            var loResult =
+                                await moUserService.updateUser(loUser);
+                            Navigator.pop(context, loResult);
                           }
+                          // }
                         }
                       },
-                      child: Text(widget.miUserId == 0
-                          ? 'Save Details'
-                          : 'Update Details')),
+                      child: Text(widget.miUserId == 0 ? 'Save' : 'Update')),
                   const SizedBox(
                     width: 10.0,
                   ),
@@ -443,7 +437,7 @@ class _EditUserState extends State<EditUser> {
                         moUserEmailController.text = '';
                         moUserDobController.text = '';
                       },
-                      child: const Text('Clear Details'))
+                      child: const Text('Clear'))
                 ],
               )
             ],
@@ -451,5 +445,9 @@ class _EditUserState extends State<EditUser> {
         ),
       ),
     );
+  }
+
+  checkDob() {
+
   }
 }

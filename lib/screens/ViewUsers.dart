@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:local_app/model/User.dart';
 
 class ViewUser extends StatefulWidget {
@@ -16,9 +13,8 @@ class ViewUser extends StatefulWidget {
 }
 
 class _ViewUserState extends State<ViewUser> {
-  // String imagePath = User().msImg!;
   File? moPickedImage;
-  String msImagePath = "";
+  String? msImagePath;
 
   @override
   void initState() {
@@ -82,33 +78,6 @@ class _ViewUserState extends State<ViewUser> {
               ),
               const SizedBox(
                 height: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.teal, width: 5),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  // )
-                ],
               ),
               Row(
                 children: [
@@ -212,21 +181,6 @@ class _ViewUserState extends State<ViewUser> {
               const SizedBox(
                 height: 20,
               ),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     const Text('Image',
-              //         style: TextStyle(
-              //             color: Colors.teal,
-              //             fontSize: 16,
-              //             fontWeight: FontWeight.w600)),
-              //     const SizedBox(
-              //       height: 20,
-              //     ),
-              //     Text(widget.moUser.msImg ?? '',
-              //         style: const TextStyle(fontSize: 16)),
-              //   ],
-              // )
             ],
           ),
         ));

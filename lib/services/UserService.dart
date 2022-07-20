@@ -30,11 +30,14 @@ class UserService {
     return await moRepository.deleteDataById('users', userId);
   }
 
+  getUserDetail(Int id) async {
+    return await moRepository.getUserAllDetail('users', id);
+  }
   checkEmailVerify(String email) async {
     return await moRepository.checkEmail('users', email);
   }
 
-  getUserDetail(Int id) async {
-    return await moRepository.getUserAllDetail('users', id);
+  checkDatabase() async {
+    return await moRepository.checkDatabase('users');
   }
 }

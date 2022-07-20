@@ -47,17 +47,24 @@ class Repository {
 
   checkEmail(table, email) async {
     var loConnection = await database;
-    var x =await  loConnection
-        ?.rawQuery(" ");
-    int count = x!.length;
-    print("Your Count is : +$count");
-    return count;
+    var loX = await loConnection?.rawQuery("SELECT count(*) from $table ");
+    int liCount = loX!.length;
+    print("Your Count is : +$liCount");
+    return liCount;
   }
+
   // checkEmail(table, email) async {
   //   var loConnection = await database;
   //   return await loConnection
   //       ?.rawQuery("SELECT count(*) from $table where email='$email'");
   // }
+
+  checkDatabase(table) async {
+    var loConnection = await database;
+    var loCount =  await loConnection?.rawQuery("SELECT COUNT(*) FROM $table");
+    print(loCount);
+    return loCount;
+  }
 
   getUserAllDetail(table, id) async {
     var loConnection = await database;
